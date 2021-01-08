@@ -1,0 +1,210 @@
+\chapter{Background questionnaire}
+\label{appendix:questions-1}
+
+\begin{lstlisting}
+Q1: Your background profession
+1) Lecturer / teacher / professor
+2) Computer science or software engineering student
+3) Software developer
+4) Teaching assistant (TA)
+5) Other
+
+Q2: How many programming courses (count each instance) you estimate you've roughly taught or been part of teaching? (even as TA)
+1) None
+2) <10
+3) 10-50
+4) >50
+
+Q3: Over how many years these courses have roughly been taught?
+1) <5
+2) 5-10
+3) 11-20
+4) >20
+
+Q4: During those courses, exercises were in majority of cases graded ...
+1) Only by hand
+2) Mostly by hand, some automatic grading
+3) About equally by hand and automatically
+4) Mostly automatic grading, some by hand
+5) Only automatic grading
+
+Q5: During those courses in most cases feedback was given to students in the exercises.
+1) Yes, verbally
+2) Yes, in writing
+3) Yes, verbally and in writing
+4) Yes, using automatic feedback system
+5) Feedback wasn't in majority of time given to students
+
+Q6: Grading exercises automatically is better than by hand.
+1) I agree strongly
+2) I agree
+3) Neutral
+4) I disagree
+5) I disagree strongly
+
+Q7: If you had to grade an exercise by hand, what would be your process roughly?
+<free-form text field>
+
+Q8: What are the biggest problems of giving feedback to students?
+[1] Too few teachers / TAs
+[2] Too many students
+[3] Not possible in the current system (eg because of automated grading)
+[4] Too difficult to invent good feedback
+[5] Too low impact
+[6] Too many exercises
+[7] <free-form text field>
+
+Q9: If you had to give feedback in writing to many students, do you think there would be a lot of repetitive work? Are there ways you would try to speed up the process? 
+<free-form text field>
+
+Q10: Giving feedback to students has no positive impact on their performance.
+1) I agree strongly
+2) I agree
+3) Neutral
+4) I disagree
+5) I disagree strongly
+
+Q11: It is very important to me to know how students have solved an exercise I have made.
+1) I agree strongly
+2) I agree
+3) Neutral
+4) I disagree
+5) I disagree strongly
+
+Q12: I often check student submissions to see how they have approached a problem.
+1) I agree strongly
+2) I agree
+3) Neutral
+4) I disagree
+5) I disagree strongly
+
+Q13: Giving good feedback can't be automated or it is too difficult to do so.
+1) I agree strongly
+2) I agree
+3) Neutral
+4) I disagree
+5) I disagree strongly
+\end{lstlisting}
+
+\chapter{CodeClusters tasks}
+\label{appendix:cc-tasks}
+
+\begin{lstlisting}
+Go to https://codeclusters.cs.aalto.fi
+
+Task 0:
+Login as a teacher. Select the course mooc-2017-ohjelmointi and exercise MarsinLampotilanKeskiarvo.
+
+Task 1.0:
+Search code with the word "luku". How many submissions do you find? How about using fuzzy search with edit distance of 2: "luku~2"?
+
+Task 1.1:
+Clear the search field. Open CyclomaticComplexity facet. Scroll back to the main search bar and click the search button (rectangle with magnifying glass). Select the buckets with CyclomaticComplexity higher than 5. Run search again (you must do this always to update facet results). How many submissions do you find?
+
+Task 1.2
+Reset the previous buckets and select CyclomaticComplexity bucket with value 3. Do you notice something strange with the submission?
+
+Task 1.3
+Close CyclomaticComplexity facet. Using facet ranges, search code which has LinesOfCode higher or equal than 30 and JavaNCSS_file between 16 - <18 and 20 - <24. How many submissions do you find?
+
+Task 1.4
+Select all the submissions found in 1.3 and give them a review with a message: "1.4 message", metadata: "1.4 metadata" and tag "tag1".
+
+Task 1.5
+Close all facets. Search submissions with the query "&". Select the line with the & operator and add a review to the submission with the message: "1.5 You have used BITAND operator (&) instead of AND operator (&&).", "1.5 Fix tests to check for bitwise operators." and tags "tag1", "test-error".
+
+Task 1.6
+Empty the search query. Add a custom_filter: BITAND_rare_keywords=[* TO *] Do you get the same result as previously? Delete the filter and add a new one: INT_keywords=1 How many submissions you find? Reset the custom filters.
+
+Task 2.0
+Go to the Model tab, select N-gram model. Run the model without changing its parameters. 
+
+Task 2.1
+Select cluster with label 1. Quickly glance through the submissions. Then select cluster 2. Can you tell what is the main difference between the clusters?
+
+Task 2.2
+If you select cluster 0 and quickly go through it, can you tell what is its difference to the others?
+
+Task 2.3
+There should be a cluster with 16 submissions total. Select that cluster and all of its submissions and give them review "2.3 message" and "tag2".
+
+Task 2.4
+Change the N-grams parameters minimum n-gram to 3 and maximum n-ngram to 7 and the clustering algorithm to OPTICS. Run the model.
+
+Task 2.5
+Select the cluster with 18 submissions. Select all submissions and add them to a review "2.5 message" and "tag2".
+
+Task 3.0
+Go to the Review Flows tab. Click New flow. Give the review flow title "3.0", description "3.0" and tag "tag3". Write \+\+* to the search query. Give review the message "3.0". Create the review flow.
+
+Task 3.1
+Select the created review flow from the drop down. Click "Run and review". From the search results, find the submission with highlighted result "++oknumcount" and select the line. Give it a review with a message "3.1 Do you know what is the difference between ++variable and variable++?" and tag "tag3".
+
+Task 4.0
+From the navigation bar, click the Reviews link to go to the /reviews page. Compare the submissions between review 2.3 and 2.5 and check the submissions that are missing from the other review. If you had to guess, what would be your explanation why.
+
+Task 4.1
+Select those submissions and link them to the missing review using the "Link" button. 
+
+Task 4.2
+Accept all reviews. Filter the page to only show the SENT reviews.
+
+\end{lstlisting}
+
+\chapter{User satisfaction and system evaluation questionnaire}
+\label{appendix:questions-2}
+
+\begin{lstlisting}
+Q1: CodeClusters was easy to use.
+1) I agree strongly
+2) I agree
+3) Neutral
+4) I disagree
+5) I disagree strongly
+
+Q2: What were the biggest problems using CodeClusters?
+[1] User interface unintuitive
+[2] Too many bugs
+[3] Too few features
+[4] I did not see it being very useful
+[5] Too slow
+[6] Unfamiliarity with the user interface
+[7] <free-form text field>
+
+Q3: If you could improve CodeClusters to fit your needs, how would you do it?
+<free-form text field>
+
+Q4: Having a code search was useful in finding interesting submissions.
+1) I agree strongly
+2) I agree
+3) Neutral
+4) I disagree
+5) I disagree strongly
+
+Q5: Being able to run a model to cluster code wasn't very useful even considering future improvements.
+1) I agree strongly
+2) I agree
+3) Neutral
+4) I disagree
+5) I disagree strongly
+
+Q6: Sending collective feedback to many students at once seemed useful
+1) I agree strongly
+2) I agree
+3) Neutral
+4) I disagree
+5) I disagree strongly
+
+Q7: I think the biggest problems in giving clustered feedback to many submissions at once are ...
+<free-form text field>
+
+Q8: What did you like the best about CodeClusters? Would you consider using it given improvements?
+<free-form text field>
+
+Q9: I could see giving feedback being integrated to programming courses using a system similar to CodeClusters.
+2) I agree
+3) Neutral
+4) I disagree
+5) I disagree strongly
+
+\end{lstlisting}

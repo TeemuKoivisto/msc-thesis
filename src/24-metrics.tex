@@ -1,0 +1,62 @@
+As mentioned in the Section~\ref{sec:analyzing-code}, code can be quantified into numeric values which are in the context of programming languages called metrics. While their purpose is good and from modeling perspective numerical values are much easier to process than text, their indicative power cannot often be verified. Therefore, a consensus exists that metrics should be treated with a healthy amount of scepticism, and be treated as guidelines rather than absolute thresholds.
+
+\subsection{Halstead complexity measures}
+
+The earliest published metrics are the Halstead complexity measures by Halstead (1972, 1977), \cite{halstead-1972, halstead-1977} that are based on the assumption that code can be measured, analogous to the measurement of physical properties of gases and matter. The earliest known plagiarism detection system of code by Ottenstein~\cite{ottenstein, jplag} (1976) was based on Halstead measures.
+
+What Halstead proposed was formulae to calculate properties such as vocabulary, volume, effort but also time to code and the number of derived bugs, all derived from counting operands and operators of the program \cite{halstead-1977}.
+
+\begin{center}
+$\eta_{1}=$ the number of distinct operators
+
+$\eta_{1} =$ the number of distinct operands
+
+$N_{1} =$ the number of total operators
+
+$N_{2} =$ the number of total operands
+\end{center}
+
+The vocabulary of the program would be for example $n=\eta_{1} + \eta_{2}$ and program length $N=N_{1} + N_{2}$ \cite{halstead-1977}.
+
+While at the time of their publication the quantification of code was a novel idea, the later research has shown that the predictive power of the measures is questionable \cite{halstead-in-oop-2004, halstead-emperors-clothes-1982}. In fact, it is debatable do any of the measures hold up to scrutiny with modern programming languages and very large repositories of source code \cite{halstead-in-oop-2004}.
+
+Interestingly, a neural network clone detection system Oreo by Saini et al. uses 24 metrics as its features which include 3 of Halstead's measures and which appeared to have worked well in detecting challenging clones~\cite{oreo, chaiyong-2018}. Perhaps neural nets could benefit from the very small signal of the measures as part of their massive datasets, but the research on the matter has not been conclusive.
+
+With CodeClusters, however, the Halstead measures were omitted due to their poor predictive power and the possible confusion arising from the naming of the measures.
+
+\subsection{Cyclomatic complexity measure}
+
+Around the same time as Halstead proposed his measures, cyclomatic complexity measure was published by McGabe (1976)~\cite{mccabe-1976}. Instead of counting the operators and operands, cyclomatic complexity counts the nodes, edges and components of the control-flow graph of the program as an indicator of its complexity. Its function $V$ is defined in the Equation \ref{eq:cc}.
+
+\vspace{-10pt}
+\begin{equation}
+\label{eq:cc}
+    V(G)=N-E+2\cdot P
+\end{equation}
+\vspace{-10pt}
+
+Where $N$ is the number of nodes, $E$ the number of edges and $P$ the number components in the directed graph $G$.
+
+The arguments for its use were based on the observation that in order for unit tests to gain full test coverage of the program, all the combinations of its execution paths should be tested. Therefore, cyclomatic complexity would directly correlate with the minimum number of tests the program would require \cite{mccabe-1976}.
+
+Since its publication, the cyclomatic complexity has endured in software engineering research better than the Halstead measures, yet its popularity has decreased noticeably \cite{halstead-in-oop-2004}. Main criticism against it is that it is a poor predictor of complexity per se. One can even say that to call it complexity when its purpose is to measure the minimum number of required tests misleading, as long code with higher cyclomatic complexity might actually be less complex than code that is short but obtuse \cite{shepperd-cc-1988}.
+
+One research even concludes that with a large enough program, the lines of code reach almost perfect linear relationship with cyclomatic complexity~\cite{cc-is-loc}. Hence, cyclomatic complexity loses any explanatory power as the correlation between the two becomes close to 1. For the 10\% of code that deviates from this a closer inspection might be in place, but in general it argues that lines of code is as good of a measure of complexity as is cyclomatic complexity. This has been noted in other studies as well \cite{shepperd-cc-1988}.
+
+Due to its prevalence in static software analyzers and therefore being easy to implement, CodeClusters allows the use of cyclomatic complexity as a parameter in its search interface. While it can produce ambiguous results, the teachers might also find outliers that contain unique solutions.
+
+\iffalse
+CodeClusters also includes NPath metric which was created as an improvement to cyclomatic complexity.
+\fi
+
+\subsection{Lines of code}
+
+One of the simplest metrics to calculate for any program is the lines of code (LOC). The exact way it is calculated has not been standardized, although most commonly only the non-blank and non-comment lines are counted. It is heavily effected by the programming style and a verbose style that uses many lines will accumulate magnitudes higher LOC than style which is terser. Also, it is not able to discern structural differences between two programs that both share the same LOC~\cite{abc-metric}.
+
+Because of its simplicity to implement, CodeClusters includes LOC as part of its search parameters. It might serve a purpose in outlier detection given that most submissions will probably be close to the average LOC.
+
+\subsection{Assignments, branches, conditionals metric}
+
+Assignments, Branches, Conditionals (ABC) metric was created as an improvement to LOC that would, instead of counting lines, count the important structural parts of the program. It is a vector $\mathbf{v}=\begin{bmatrix} A & B & C \end{bmatrix}$ where each value is counted by methods specific to a given programming language. The resulting 3-length vector can then be used as such or by its magnitude $|\mathbf{v}|=\sqrt{A^2+B^2+C^2}$. It was designed to overcome the major weaknesses of LOC by being able to discern structural differences and not being heavily effected by the coding style. It is, however, dependent on the methodology how it is counted and each programming language and implementation might follow a different methodology \cite{abc-metric}. It has been used in some automatic student feedback systems \cite{fox-roy-autostyle-msc-2016}.
+
+Although interesting, ABC metric was ultimately not implemented in CodeClusters as it already had a good number of metrics. Also the time required to implement it at the expense of other, more critical features, was a concern.

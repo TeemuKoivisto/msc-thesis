@@ -1,0 +1,137 @@
+The previous section presented a few of the possible methods to produce similarity or distance matrices of the submissions. While the matrix could be analyzed as such to find the lowest or highest values to cluster the submissions, this method is not very scalable or flexible and it would require manual input from the teachers.
+
+The values of the matrix could be defined as a set of vectors $X=\{\mathbf{x}_1, ..., \mathbf{x}_n\}, \mathbf{x}_i \in \mathbb{R}^s$ in $s$-dimensional space where $s$ is the number of submissions. Subsection \ref{ssec:ir-system} discussed probabilistic IR models that were a form of supervised learning to classify the submissions into either relevant or non-relevant classes: $C=\{"R", "NR"\}$. Yet for the similarity data we have not defined any classes to classify them with. Subsection \ref{ssec:manual-review} analyzed how plausible manually classifying the submissions would be, but the research showed this approach not to be very reliable. Therefore, we are limited to unsupervised learning methods, a category of machine learning, where unlabeled data, such as code submissions, is discerned for patterns or clusters \cite{data-mining-2011}.
+
+Clustering is a subcategory of unsupervised learning in which the datapoints are automatically separated into as similar clusters as possible, maximizing the dissimilarity between the clusters. The clustering algorithms can be categorized in multiple ways but we divide them into three major types: hierarchical, partitioning and density-based. They each follow a particular approach how they form the clusters and how they expect the datapoints to be distributed \cite{optics-1999, data-mining-2011}.
+
+With hierarchical clustering each point is processed individually by their proximity to other points or clusters and continued until all points have been separated or joined into one cluster. This results in a hierarchical tree from which the most optimal splits of the points can be found and the clusters that seem the most prominent. Partitioning algorithms try to divide the points into regions belonging to a certain cluster. Density-based algorithms use the density of the points to create clusters that are separated by lower-density boundary regions \cite{data-mining-2011, jain-50y-kmeans-2010, optics-1999}.
+
+The benefits of each approach depend on the used data and on how one would like the data to be clustered. In the extent of this thesis, we shall be discussing in more detail only k-means, DBSCAN and OPTICS clustering algorithms. They were selected for their popularity and use in other student submission clustering studies \cite{divide-and-correct, fox-clust-leverage-2015, glass-feature-engineering, fox-roy-autostyle-msc-2016}. We also evaluated them with CodeClusters using n-grams based similarity detection model and the experiments found none of them to be distinctively better than the others. The model and clusterings were ran with various parameters and the clusters were analyzed manually and by their silhouette scores. Silhouette score measures the degree how distinct the clusters are based on the distances of the points in and outside the clusters. A low score would indicate little difference between the clusters and higher score more distinct and separable clusters \cite{fox-clust-leverage-2015}.
+
+For the teachers the choice of the algorithm might not be of much importance since they are only interested in the analysis of the clusters and the submissions. But during the experimentation with CodeClusters it became evident that clustering cannot be completely abstracted from the teachers, as the differences between different algorithms can be substantial. Also, some of the teachers might enjoy changing the clustering parameters manually by themselves. We included 4 clustering algorithms in CodeClusters which were k-means, DBCSAN, HDBSCAN and OPTICS.
+
+\subsection{K-means}
+\label{ssec:kmeans}
+
+Its idea going back to 1950s, k-means is a partitioning clustering algorithm that uses cluster center points, centroids, to assign data points into clusters. Its parameters are a set of observations $X=\{\mathbf{x}_1, ..., \mathbf{x}_n\}, \mathbf{x}_i \in \mathbb{R}^d$ of vectors in a $d$-dimensional space and the used number of clusters $k$. A distance metric can be given optionally as third parameter but squared Euclidean distance is commonly used: $d(\mathbf{x}, \mathbf{y})=\sum^{n}_{i=1} (\mathbf{x}_i - \mathbf{y}_i)^2 + ... + (\mathbf{x}_n - \mathbf{y}_n)^2$ \cite{islr-2014, jain-50y-kmeans-2010}.
+
+\begin{algorithm}
+\caption{K-means algorithm \cite{ir-in-practise}}\label{alg:kmeans}
+\begin{algorithmic}[1]
+\Require Set of datapoints $X=\{\mathbf{x}_1, ..., \mathbf{x}_n\}$
+\Require Number of clusters $k$
+\Procedure{K-means}{$X,k$}
+  \State $L[1], ..., L[n] \gets \Call{SampleRandomCluster}{X, k}$ \Comment{Initialize cluster labels}
+  \State $C \gets \Call{ComputeCentroids}{X, L}$
+  \State $changed \gets true$
+  \While{$changed \: \mathbf{is\:} true$}
+    \State $changed \gets false$
+    \For{$i=1$ $\mathbf{to}$ $|X|$}
+      \State $\hat{k} \gets \Call{NearestCluster}{\mathbf{x}_i, C}$ \Comment{Use k-means to compute distance}
+      \If{$L[i] \: \mathbf{is\: not\: equal}\: \hat{k}$}
+        \State $L[i] \gets \hat{k}$
+        \State $changed \gets true$
+      \EndIf
+    \EndFor
+    \State $C \gets \Call{ComputeCentroids}{X, L}$ \Comment{Update centroids}
+  \EndWhile\label{euclidendwhile}
+  \State \textbf{return} $L, C$
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
+
+K-means (see pseudocode Algorithm \ref{alg:kmeans}) partitions the data by assigning the points to their closest cluster centroid and recalculates the centroids until the clusters stay unchanged. In the first iteration the points are assigned randomly to clusters and at the end of each iteration, the new centroid becomes the average mean of their coordinates. The algorithm is guaranteed to converge in a finite number of steps, although with a large enough dataset and $k$ it might take unreasonably long. However, there are no guarantees of it converging to a global minimum, therefore often multiple iterations of the algorithm are run \cite{jain-50y-kmeans-2010}.
+
+The benefits of k-means are its simplicity, customizability and easily interpreted results. It is also relatively fast compared to some more complicated clustering algorithms. Its drawbacks are inherent to its assumption about clusters having clear central points. While it is highly effective for low-dimensional, globular data in many cases the data is not as clearly separable. If the clusters are asymmetric and non-circular shaped, k-means might not be able to partition them optimally. K-means is also susceptible to outliers that distort the average mean of the cluster, therefore skewing the centroid away from the mass of the cluster. Also, if we would prefer not to cluster all the points there is no notion of unclustered data with k-means, which reduces its flexibility \cite{jain-50y-kmeans-2010, ma-kmeans-dbscan-timeseries}.
+
+It could be said that when k-means fits the data and all the points should be clustered, it is a very efficient method of clustering. However, many other methods also work well on similarly easily clusterable data, which somewhat limits its use. With CodeClusters we found k-means to be a good addition to the density-based methods, as by increasing the $k$ you could see what the underlying model considered as similar submissions. Many of the clusters did not, however, seem to be distinct enough to have exhibited discernible structural patterns. The used n-grams model produced only one clearly centroidic cluster which would indicate that the similarity data may not be very globular. Nevertheless, k-means is an easy and quick method to divide the submissions into more manageable chunks, which could be valuable for analyzing the data.
+
+\subsection{DBSCAN}
+\label{ssec:dbscan}
+
+Density-based spatial clustering of applications with noise (DBSCAN) by Ester et al. (1996) \cite{dbscan-1996} is one of the most popular clustering algorithms. This could be explained by its relative simplicity and high applicability to various types of data. In DBSCAN, user is required to provide two parameters: \texttt{minPts}, the minimum number of points to form a dense region, and $\epsilon$, the radius within they are calculated. Optionally, a distance function can also be provided but Euclidean distance is often used: $d(\mathbf{x}, \mathbf{y})=\sqrt{(\mathbf{x}_i - \mathbf{y}_i)^2 + ... + (\mathbf{x}_n - \mathbf{y}_n)^2}$ \cite{dbscan-1996, data-mining-2011}.
+
+\begin{algorithm}
+\caption{DBSCAN algorithm \cite{dbscan-1996}}\label{alg:dbscan}
+\begin{algorithmic}[1]
+\Require Set of datapoints $X=\{\mathbf{x}_1, ..., \mathbf{x}_n\}$
+\Require Distance radius $\epsilon$
+\Require Minimum number of points to form a dense region $minPts$
+\Require Distance function $distFunc: (\mathbf{x}, \mathbf{y}) \xrightarrow{} \mathbb{R}$
+\Procedure{DBSCAN}{$X,\, \epsilon,\, minPts,\, distFunc$}
+  \State $T[1], ..., T[n] \gets (x_i, i)$ \Comment{A list of tuples with the point and index}
+  \State $L[1], ..., L[n] \gets undefined$ \Comment{Labels of the points}
+  \State $c \gets 0$ \Comment{Start cluster labels from 0}
+  \For{$p$ $\mathbf{in}$ $T$}
+    \If{$L[p_2]\: \mathbf{is\: not\:} undefined$}
+      \State $\mathbf{continue}$ \Comment{Point already processed}
+    \EndIf
+    \State $N \gets \Call{NeighborsInRadius}{T, p, \epsilon, distFunc}$
+    \If{$|N| < minPts$}
+      \State $L[p_2] \gets noise$ \Comment{Not a core point}
+      \State $\mathbf{continue}$
+    \EndIf
+    \State $L[p_2] \gets c$ \Comment{Assign point to the cluster}
+    \State $S \gets N \setminus \{p\}$ \Comment{Initialize the seed set as neighbors minus the point itself}
+    \State $S \gets \Call{ExpandCluster}{S, T, \epsilon, minPts, distFunc}$
+    \For{$s$ $\mathbf{in}$ $S$}
+      \State $L[s_2] \gets c$ \Comment{Assign the found neighbors to cluster}
+    \EndFor
+    \State $c \gets c + 1$ \Comment{Start new cluster}
+  \EndFor
+  \State \textbf{return} $L$
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
+
+The premise on which DBSCAN rests is its definition of a cluster. Unlike k-means, DBSCAN does not presume clusters to always have a centroid shape. Rather, DBSCAN expects a cluster to be a region where the points are highly close to each other, separated from other clusters by lower density boundary regions. DBSCAN can also leave points unclassified if they are simply too far from the dense regions to be considered as part of clusters. This is helpful in modeling the uncertainty of the classifications without further work \cite{ma-kmeans-dbscan-timeseries, dbscan-1996}.
+
+Algorithm \ref{alg:dbscan} shows a pseudocode representation of DBSCAN. It takes as its input a set of vectors $X$ and then iterates over every point, skipping the points it already has processed. If it has not processed a point, DBSCAN calls $\Call{NeighborsInRadius}{}$ to find how many neighbors are in its radius. If it is more than \texttt{minPts}, it is considered a dense region and a new cluster is created, if it is less, the point is labeled as noise. If the point formed a dense region, then all the nearby points that are density-reachable of each other are found by calling $\Call{ExpandCluster}{}$ until the set can no longer be expanded. Once all the points have been found, they are assigned the cluster label and the cluster id is incremented. DBSCAN outputs a list of labels $L$ with each point either given cluster label or unclassified value \cite{dbscan-1996, data-mining-2011}.
+
+Compared to k-means, DBSCAN avoids some of its weaknesses. DBSCAN does not require the number of clusters to be predefined and it does not rely on the clusters to have a centroid shape. That said, DBSCAN heavily depends on the density of the clusters to stay consistent. If there were clusters of varying density, DBSCAN would not be able to perform well as the epsilon value would have to be tuned separately for each cluster. Another possible source of inconvenience is the \texttt{minPts} parameter which has to be set manually, although there are guidelines how to choose it correctly. Algorithms have been since published that attempt to improve DBSCAN such as OPTICS or HDBSCAN \cite{ma-kmeans-dbscan-timeseries, data-mining-2011}.
+
+\subsection{OPTICS}
+\label{ssec:optics}
+
+Ordering Points To Identify the Clustering Structure (OPTICS) by Ankerst et al. (1999) \cite{optics-1999} was created as an improvement to DBSCAN. They share very similar implementation yet unlike DBSCAN, OPTICS is able to find clusters of varying density. This is accomplished by forming clusters for multiple $\epsilon$ values and then clustering the points by selecting the most distinct dense areas. The parameter $\epsilon$ itself is less important in OPTICS, as its main purpose is to increase execution speed. Low $\epsilon$ will avoid processing very large density radiuses but the value can be set at maximum without other downsides than speed \cite{optics-1999, data-mining-2011}.
+
+\begin{algorithm}
+\caption{OPTICS algorithm \cite{optics-1999}}\label{alg:optics}
+\begin{algorithmic}[1]
+\Require Set of datapoints $X=\{\mathbf{x}_1, ..., \mathbf{x}_n\}$
+\Require Maximum distance radius $\epsilon$
+\Require Minimum number of points to form a dense region $minPts$
+\Require Distance function $distFunc: (\mathbf{x}, \mathbf{y}) \xrightarrow{} \mathbb{R}$
+\Procedure{OPTICS}{$X,\, \epsilon,\, minPts,\, distFunc$}
+  \State $T[1], ..., T[n] \gets (x_i, i, unprocessed)$ \Comment{A list of tuples}
+  \State $R[1], ..., R[n] \gets [\:]$ \Comment{Ordered list of reachability distances}
+  \State $CD \gets \Call{ComputeCoreDistances}{X, \epsilon, minPts, distFunc}$
+  \For{$p$ $\mathbf{in}$ $T$}
+    \If{$p_3\: \mathbf{is\:} processed$}
+      \State $\mathbf{continue}$
+    \EndIf
+    \State $p_3 \gets processed$
+    \State $N \gets \Call{NeighborsInRadius}{T, p, \epsilon, distFunc}$
+    \If{$|N| < minPts$}
+      \State $\mathbf{continue}$ \Comment{Not a core point}
+    \EndIf
+    \State $S \gets \{\}$ \Comment{Initialize the seed set as empty priority queue}
+    \State $\Call{Update}{N, p, S, R, CD}$
+    \For{$q$ $\mathbf{in}$ $S$}
+      \State $N' \gets \Call{NeighborsInRadius}{T, q, \epsilon, distFunc}$
+      \State $q_3 \gets processed$
+      \If{$|N'| \geq minPts$}
+        \State $\Call{Update}{N', q, S, R, CD}$
+      \EndIf
+    \EndFor
+  \EndFor
+  \State \textbf{return} $R$
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
+
+As shown in the pseudocode Algorithm \ref{alg:optics}, OPTICS first initializes the ordered list of reachability distances and calculates the core distances of all the points in the dataset. Core distance is either the distance to nearest core point or \texttt{undefined} if no point can be found. Reachability distance is the smallest $\epsilon$ value from a point $p$ to $q$ that satisfies the \texttt{minPts} threshold, thus $p$ becoming a core point. In finding the nearest points the range queries are optimized with spatial indexes to speed up the execution. After the initialization OPTICS iterates over the points, similar to DBSCAN, but instead of expanding the cluster after a core point is found, it updates the reachability distances. When no more points remain unprocessed, OPTICS outputs the reachabilities as an ordered list which can be used to plot them with the used epsilon values. The clusters can be extracted by selecting the points that are surrounded by steep boundary areas, leaving out the outliers as unclassified \cite{data-mining-2011}.
+
+OPTICS is a robust and versatile tool for detecting density-based clusters with its main weakness compared to DBSCAN the slightly slower execution speed but this should not be a problem with small datasets and low enough $\epsilon$. OPTICS also uses \texttt{minPts} parameter which requires some expertise to set correctly. Fox et al. compared several popular clustering algorithms for clustering student programming submissions that were processed into an edit-distance matrix by a weighted TED algorithm. They found that the density-based algorithms, such as DBSCAN and OPTICS, produced the best results. Between the two they found OPTICS to be more suitable given its informative reachability plot and ability to find clusters of varying density \cite{fox-clust-leverage-2015}.
+
+For us this would also make sense, as we are interested in finding the most common structural patterns leaving the outliers unclassified. With CodeClusters OPTICS was perceived as easier to use than DBSCAN but quite equivalent to HDBSCAN. The clusters OPTICS produced were a little larger with more similar submissions than those produced with DBSCAN, yet the difference was quite small.

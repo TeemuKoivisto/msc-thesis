@@ -1,0 +1,105 @@
+In this chapter a qualitative analysis of the provided answers to the questionnaires, how teachers completed the tasks and about the general commentary during the interview is conducted. The small sample size of 5 is not large enough for quantitative analysis with statistical methods but it was sufficient for exploratory analysis.
+
+To summarize, the results are mostly positive. Teachers expressed the learning of the system within the duration of the interviews challenging, which underlined a need for a good onboarding process. The features of CodeClusters were seen quite satisfactory and had it been available to the programming language they used with an integration to their LMS, everybody would have enjoyed trying it in a programming course they teach.
+
+\section{Background questionnaire}
+
+All the participants declared themselves to be university lecturers, as expected. Many had long careers in education and one participant explained that in the end of the 80s and the start of the 90s the grading was manual but had since transferred mostly to automatic grading. Also, another teacher explained that the programming courses were segmented into two: the regular programming courses and the project courses. The project courses do not use automatic test suites while the regular courses are heavily automated. It was also expressed that intermediary courses exist which have aspects of both.
+
+A small source of confusion arose from the question "\textit{Grading exercises automatically is better than by hand.}" which required explicit explaining from whose perspective it should be answered. For students, automatic grading could be seen as a worse option as they would receive less personalized feedback. However, since teachers are heavily constrained by the available time to run the courses, the participants were specifically asked to consider the question from a teacher's point of view. One teacher also noted that receiving instant grades and feedback is far more useful for the students than one that is provided perhaps a week later, since students might not even bother reading it or pay much attention. Almost everyone viewed automatic grading better.
+
+For the free-form text field questions "\textit{If you had to grade an exercise by hand, what would be your process roughly?}" and "\textit{If you had to give feedback in writing to student for an exercise, what would be your process roughly?}" the answers are highly similar, possibly because the manual grading process would also involve writing of feedback. Yet, as one teacher explained they had not even reviewed manually programming exercises and by how inexact some of the answers were, it would seem that manual grading and providing feedback is not that commonplace. The questions did not specify the type of the courses, regular or project courses, and no teacher explicitly differentiated between the two. But a good guess would be that in practice most of the time, if not always, only the project courses are manually graded and provided feedback.
+
+The process is described in general to be the checking of the model solution, then grading and writing feedback based on the problems. Many mentioned the use of grading rubrics or checklists that would define the criteria for evaluation, such as Rubyric~\cite{aalto-rubyric-2009}. One participant also mentioned the use of Github issues and messaging applications such as Telegram for providing feedback.
+
+Almost all participants agreed on too few teachers and teaching assistants, alongside having a large number of students, being the main problems with providing feedback to students. 
+
+On the effectiveness of providing feedback, everyone agreed on it being very important part of learning process. Similarly, every teacher agreed that knowing how students solve an exercise is very important. The answers were dispersed, however, on the approach to check the student solutions. The majority of answers were neutral on the question "\textit{I often check student submissions to see how they have approached a problem.}" and during the interviews it was mentioned that a tool exists that provides snapshots of students' code by specified intervals, allowing teachers to see how they have progressed towards solving the exercise~\cite{hy-code-browser-2014}. However, based on the answers and what teachers mentioned during the interviews, it is evident that the final passed submissions are not collectively analyzed. Perceptions on the overall applicability on automated feedback were mostly positive, yet it was mentioned that the quality of the automated feedbacks is another matter. It took in average 5 minutes to answer the questionnaire.
+
+\section{CodeClusters tasks}
+
+The teachers were given an imaginary task of reviewing Java programming course submissions for outliers or other interesting patterns and to provide simulated feedback. To save time all the tasks were scripted and the teachers given help whenever it became clear that they did not know how to perform the task. It is very evident that asking people to use completely unknown system is not without drawbacks, and many of the teachers explained that they did not always understand the function of the task performed. This may also have been caused by the context of the tasks not being very discernible, which was difficult to provide given that they were simulated without prior experience using the system for programming courses.
+
+During the search tasks, many had problems in finding the correct buttons without help as many of the buttons did not have indicative titles on their function. Shortly explaining where to look did always result in the participant finding the correct controls.
+
+In a task where teachers used the Lucene facets, teachers were asked to select a bucket of submissions with cyclomatic complexity of 3. Only one submission existed of this kind and they were asked if they saw anything wrong with the submission. None of the teachers detected the incorrect use of BIT\_AND operator (\&) instead of AND operator (\&\&). Many of the teachers did explain that they had not used Java for a long time, but still this would indicate that teachers might be unaware of the possible erroneous ways to solve the exercise which the automated tests have failed to capture.
+
+After using the search interface for a while, all the teachers became quite familiar with it and although some parts of the UI were less intuitive than others, for example the advanced search or modeling, the teachers did not seem to have persistent problems with the UI. However, it would require a longer time for teachers to use the system to verify this conclusively.
+
+In the modeling tasks, teachers were asked to run the n-gram model and compare the submissions between the clusters. The model divided the submissions into structurally very similar clusters that shared the same syntactical tokens all the way to the individual ordering of the statements. The difference between two clusters might have been the use of additional variable or having \texttt{else if} instead of \texttt{if}.
+
+The comparison, however, proved to be difficult and not many teachers were able to detect the differences without help. One teacher even mentioned that without having the submissions side by side, it was not easy to remember what they were comparing against. This underlines a need for user interface improvement to allow side-by-side comparisons.
+
+The remaining tasks teachers performed without major problems although the layout of the submission-to-review grid was a bit non-obvious to the teachers. They did not immediately see that the rows are the submissions and the columns the reviews, and the behaviour of the linking and unlinking of reviews was not completely clear.
+
+In total, the time it took to perform the tasks ranged from 30 to 50 minutes, depending on how much the teacher wanted to discuss the system and analyze the submissions.
+
+\section{User satisfaction and system evaluation questionnaire}
+
+For the first question, the majority of answers were neutral on CodeClusters being easy to use. This correlates with how the teachers performed the tasks and which highlights a need for a good onboarding process and UI improvements. There also exists inherent complexity in using the full Lucene API and setting the modeling parameters manually, which probably contributed to the overall impression of complexity. Majority of the teachers chose as the main problems with CodeClusters the unfamiliarity and the unintuitivity of the UI.
+
+For improvements most wrote only one, although the answers were unique across the participants. Many said during the interviews that they would like to use the system with a programming language their course used. Also some noted that they wanted a better way to compare submissions from different clusters and from even different searches or differently parametrized models. One feedback asked for moving the search closer to the results.
+
+A majority agreed on the code search being useful in finding interesting submissions, although a portion was neutral on its applicability. On the modeling part there was a similar split where the majority agreed that modeling could be useful given future improvements, a portion being neutral. Everybody agreed sending feedback is useful with the split being half on "I agree" and "I strongly agree".
+
+On the problems of giving clustered feedback the majority of teachers, either directly or indirectly, were suspecting of the applicability and reliability of the clusters. Similarly, the tuning of the model and setting its parameters were seen hard to grasp. The user interface was also expressed to could have been better.
+
+For the question "\textit{What did you like the best about CodeClusters? Would you consider using it given improvements?}" all the teachers expressed interest in trying it for a programming course they teach. Many saw it having a good potential in being a helpful tool for analyzing large quantities of submissions that otherwise would go unprocessed. Everybody agreed and majority of them strongly, that they could see providing additional feedback being implemented to programming courses with a system similar to CodeClusters. The second questionnaire took in average two minutes to answer.
+
+\section{Criteria-based evaluation}
+
+We evaluate our artifact for basic software product requirements it should meet using the UI design criteria proposed by Gram and Cockton ~\cite{drs-drm, drs-gram-cockton-1996}. They categorize these requirements based on the stakeholder, user or software engineer, as well as on properties which the UI or the system around it should satisfy.
+
+\bigskip
+\noindent
+From \textbf{user's perspective}, in our case teachers, the criteria are as following:
+
+\begin{enumerate}
+    \item \textit{Goal and task completeness: you can do what you thought of doing}
+    \item \textit{Flexibility: you can do things in several ways}
+    \item \textit{Robustness: you can avoid doing things you wish you had not done}
+    \item \textit{Learnability: the ease with which novice users can acquire competent performance}
+    \item \textit{User satisfaction: how a system makes users feel in terms of sense of achievement or excitement}
+\end{enumerate}
+
+For the first criteria, the artifact can be considered to have average goal and task completeness. While the tasks were scripted, on many occasions teachers did not always find the proper UI controls or understand how they behaved. This could also be contributed to common unfamiliarity which is universal to all UIs.
+
+CodeClusters has moderate to high flexibility as many of the operations can be done in multiple ways. The search supports using various parameters to receive the same results and feedback can be added with clicking the submissions or using the small menu at the bottom right corner. The n-gram model also enables flexible parametrization which supports various clustering algorithms and token sets. Using review flows the different operations can also be composed into single executable actions.
+
+Robustness of the artifact can be considered as moderate to high. All the actions can be reversed without permanently modifying the state of the system and there are edit or delete controls for majority of the database schemas. The UI is quite explicit in its behavior and although some operations, such as manually selecting submissions and then resetting them with the bottom-right menu, are possible, doing that by accident should not a consistent problem.
+
+Based on the second questionnaire and the task performance, the learnability of the artifact is probably low to average. Some teachers were able to grasp the UI better than others, yet some would have not been able to use it without exact instructions. In time perhaps the user could acquire solid understanding of the UI but it is difficult to extrapolate this based on our results.
+
+User satisfaction of the artifact is not very easy to assess on such short timespan performing the tasks. While most of the teachers were neutral on CodeCluster's ease of use, everyone also agreed that the artifact would be interesting to use in a programming course they teach. Teachers did seem to appreciate the features of CodeClusters, the speed it executed operations such as search or models and the overall objectives of its design, but to conclude how satisfied they are would require actual user experiences using it in programming courses. Therefore, at this stage of the artifact, an estimation of moderate user satisfaction is perhaps the most accurate.
+
+\bigskip
+
+\noindent
+From \textbf{software engineer's} perspective the design criteria are~\cite{drs-drm, drs-gram-cockton-1996}:
+
+\begin{enumerate}
+    \item \textit{Modifiability: how easy it is to modify the system when facilities have to be extended}
+    \item \textit{Portability: how easy it is to change its hardware and software environments}
+    \item \textit{Evaluability: how easy it is to evaluate the system against quality goals}
+    \item \textit{Maintainability: once installed in an environment, how easy it is to maintain the system}
+    \item \textit{Run-time efficiency: whether the system consumes an acceptably low fraction of computer resources}
+    \item \textit{User-interface integratability: how easy is it to integrate the interactive system with existing or new software applications}
+    \item \textit{Functional completeness: whether the system has sufficient functionality to support users to do their tasks}
+    \item \textit{Development efficiency: whether the most effective use of resources is being made during system development}
+\end{enumerate}
+
+The system is written in popular programming languages such as TypeScript and Python and it uses popular libraries and frameworks such as React and Solr. Also, while the system lacks tests it has been built to meet the quality requirements based on the author's experience working as a software developer in the industry. This should make the adding of future modifications convenient given that the developer has experience working with these technologies. Therefore, the modifiability of the system should be moderate to high.
+
+Using Docker containers the different parts of the system are insulated from conflicting dependencies which keeps also the build process very reproducible. Any environments that support Docker and Docker Engine should be able to run the system, although the deployment and other scripts are written in Bash which are not portable to all operating systems. The portability of the system can therefore be seen as very high.
+
+We have not specified any quality goals the system should meet which makes assessing its evaluability somewhat difficult. All the code has been produced to the level of quality standard of the author, which might be seen as above average. The clear separation of concerns of the system as well as code, can be considered to follow the best practices of architecting software. Every part of the deployment and running the system locally are documented, which was a purposeful aim during the development. The evaluability could therefore be seen as moderate.
+
+The maintainability of the system would be high from both deployment and development perspective. Once the application is deployed, it should stay running without problems and restart gracefully. To deploy new versions the process is well-documented albeit manual. From development perspective the system is also easy to run locally and most parts are executed as Docker containers.
+
+Run-time efficiency of the system is high, although there definitely are bottlenecks in the processing pipelines that might become restricting with large datasets. The search and UI uses pagination to limit the number of shown and processed submissions, but the execution of models and the submission-to-review grid require fetching of all the submissions to function. The Solr server takes the majority of RAM of the system with the other services, such as Nginx and Node.js, taking only negligible amounts.
+
+UI integratability of the system is average to low, depending on the evaluation criteria. Certainly CodeClusters should have an integration to at least one LMS with university credential-based user authentication. However, as a separate service CodeClusters is easy to add to existing systems and it does not conflict with previous workflows.
+
+Functional completeness of the system is still low although a lot of features have been implemented to varying extent. The search functionality of the system is quite complete, but the modeling and review parts still require additional work as well as the integrations to other systems. All the features also require testing by the teachers to process actual course data and proper integration and unit tests.
+
+Development efficiency of the system at its current stage is average to high, depending on the skill set of the developer. Most of the major architectural choices have already been made and the configuration, as well as the boilerplate, written to large extent. Therefore, any new developers could spend their time on the actual features instead of unrelated tasks.

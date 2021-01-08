@@ -1,0 +1,198 @@
+%% This file is modified by Veli Mäkinen from HY_fysiikka_LuKtemplate.tex authored by Roope Halonen ja Tomi Vainio.
+%% Some text is also inherited from engl_malli.tex by Kutvonen, Erkiö, Mäkelä, Verkamo, Kurhila, and Nykänen.
+
+
+% STEP 1: Choose oneside or twoside
+\documentclass[english,twoside,openright]{HYgraduMLDS}
+%finnish,swedish
+
+%\usepackage[utf8]{inputenc} % For UTF8 support. Use UTF8 when saving your file.
+\usepackage{lmodern} % Font package
+\usepackage{textcomp} % Package for special symbols
+\usepackage[pdftex]{color, graphicx} % For pdf output and jpg/png graphics
+\usepackage[pdftex, plainpages=false]{hyperref} % For hyperlinks and pdf metadata
+\usepackage{fancyhdr} % For nicer page headers
+\usepackage{tikz} % For making vector graphics (hard to learn but powerful)
+%\usepackage{wrapfig} % For nice text-wrapping figures (use at own discretion)
+\usepackage{amsmath, amssymb} % For better math
+\usepackage{listings} % For long ass verbatims
+\usepackage{cite} % For ordered citations
+\usepackage{algorithm} % For better pseudocode algorithms
+\usepackage{algpseudocode} % The same as previous
+%\usepackage{csquotes} % Block quotes
+\usepackage [autostyle, english = american]{csquotes}
+\MakeOuterQuote{"}
+
+\lstset{
+basicstyle=\small\ttfamily,
+columns=flexible,
+breaklines=true
+}
+%\usepackage[square]{natbib} % For bibliography
+\usepackage[footnotesize,bf]{caption} % For more control over figure captions
+\usepackage{blindtext}
+\usepackage{titlesec}
+\usepackage[titletoc]{appendix}
+
+\onehalfspacing %line spacing
+%\singlespacing
+%\doublespacing
+
+%\fussy 
+\sloppy % sloppy and fussy commands can be used to avoid overlong text lines
+
+% STEP 2:
+% Set up all the information for the title page and the abstract form.
+% Replace parameters with your information.
+\title{Clustering of programming exercises for efficient reviewing and exploration}
+\author{Teemu Koivisto}
+\date{\today}
+\prof{Dr. Arto Hellas}
+\censors{Professor Jussi Kangasharju}{}{}
+\keywords{programming education, MOOCs, clustering, similarity detection, ASTs, CodeClusters}
+\depositeplace{}
+\additionalinformation{}
+
+
+\classification{
+\\
+Computing methodologies $\rightarrow$  Machine learning $\rightarrow$  Learning paradigms $\rightarrow$  Unsupervised learning \\
+Information systems $\rightarrow$  Information retrieval $\rightarrow$  Retrieval tasks and goals $\rightarrow$ Clustering and classification\\
+Information systems $\rightarrow$  Information systems applications $\rightarrow$  Data mining\\
+Social and professional topics $\rightarrow$  Professional topics $\rightarrow$  Computing education $\rightarrow$  Computing education programs $\rightarrow$ Computer science education}
+
+% if you want to quote someone special. You can comment this line and there will be nothing on the document.
+%\quoting{Bachelor's degrees make pretty good placemats if you get them laminated.}{Jeph Jacques} 
+
+
+% OPTIONAL STEP: Set up properties and metadata for the pdf file that pdfLaTeX makes.
+% But you don't really need to do this unless you want to.
+\hypersetup{
+    bookmarks=true,         % show bookmarks bar first?
+    unicode=true,           % to show non-Latin characters in Acrobatâs bookmarks
+    pdftoolbar=true,        % show Acrobatâs toolbar?
+    pdfmenubar=true,        % show Acrobatâs menu?
+    pdffitwindow=false,     % window fit to page when opened
+    pdfstartview={FitH},    % fits the width of the page to the window
+    pdftitle={},            % title
+    pdfauthor={},           % author
+    pdfsubject={},          % subject of the document
+    pdfcreator={},          % creator of the document
+    pdfproducer={pdfLaTeX}, % producer of the document
+    pdfkeywords={something} {something else}, % list of keywords for
+    pdfnewwindow=true,      % links in new window
+    colorlinks=true,        % false: boxed links; true: colored links
+    linkcolor=black,        % color of internal links
+    citecolor=black,        % color of links to bibliography
+    filecolor=magenta,      % color of file links
+    urlcolor=cyan           % color of external links
+}
+
+\begin{document}
+
+% Generate title page.
+\maketitle
+
+% STEP 3:
+% Write your abstract (of course you really do this last).
+% You can make several abstract pages (if you want it in different languages),
+% but you should also then redefine some of the above parameters in the proper
+% language as well, in between the abstract definitions.
+
+\begin{abstract}
+Programming courses often receive large quantities of program code submissions to exercises which, due to their large number, are graded and students provided feedback automatically. Teachers might never review these submissions therefore losing a valuable source of insight into student programming patterns.
+
+This thesis researches how these submissions could be reviewed efficiently using a software system, and a prototype, CodeClusters, was developed as an additional contribution of this thesis. CodeClusters' design goals are to allow the exploration of the submissions and specifically finding higher-level patterns that could be used to provide feedback to students. Its main features are full-text search and n-grams similarity detection model that can be used to cluster the submissions.
+
+Design science research is applied to evaluate CodeClusters' design and to guide the next iteration of the artifact and qualitative analysis, namely thematic synthesis, to evaluate the problem context as well as the ideas of using software for reviewing and providing clustered feedback. The used study method was interviews conducted with teachers who had experience teaching programming courses.
+
+Teachers were intrigued by the ability to review submitted student code and to provide more tailored feedback to students. The system, while still a prototype, is considered worthwhile to experiment on programming courses. A tool for analyzing and exploring submissions seems important to enable teachers to better understand how students have solved the exercises. Providing additional feedback can be beneficial to students, yet the feedback should be valuable and the students incentivized to read it.
+
+\end{abstract}
+
+% Place ToC
+\mytableofcontents
+
+\mynomenclature
+
+\chapter{Introduction}
+\label{ch:introduction}
+\input{10-introduction}
+
+\chapter{Background}
+\label{ch:background}
+\input{20-background}
+
+\section{Information retrieval}
+\label{sec:ir}
+\input{21-information-retrieval}
+
+\section{Analysis of program code}
+\label{sec:analyzing-code}
+\input{22-analyzing-code}
+
+\section{Representations of program code}
+\label{sec:representations}
+\input{23-representations}
+
+\section{Software metrics}
+\label{sec:metrics}
+\input{24-metrics}
+
+\section{Similarity detection}
+\label{sec:sim-detection}
+\input{25-similarity-detection}
+
+\section{Clustering}
+\label{sec:clustering}
+\input{26-clustering}
+
+\chapter{System description}
+\label{ch:system-description}
+\input{30-system-description}
+
+\section{Architecture}
+\label{sec:architecture}
+\input{31-architecture}
+
+\section{Related systems}
+\label{sec:related-systems}
+\input{32-related-systems}
+
+\chapter{Methodology}
+\label{ch:methodology}
+\input{40-methodology}
+
+\chapter{Results}
+\label{ch:results}
+\input{50-results}
+
+\chapter{Discussion}
+\label{ch:discussion}
+\input{60-discussion}
+
+\chapter{Conclusions}
+\label{ch:conclusions}
+\input{70-conclusions}
+ 
+% STEP 5:
+% Uncomment the following lines and set your .bib file and desired bibliography style
+% to make a bibliography with BibTeX.
+% Alternatively you can use the thebibliography environment if you want to add all
+% references by hand.
+
+\cleardoublepage %fixes the position of bibliography in bookmarks
+\phantomsection
+
+\addcontentsline{toc}{chapter}{\bibname} % This lines adds the bibliography to the ToC
+\bibliographystyle{abbrv} % numbering alphabetic order
+\bibliography{bibliography}
+
+\begin{appendices}
+\myappendixtitle
+
+\input{99-appendix}
+
+\end{appendices}
+
+\end{document}
